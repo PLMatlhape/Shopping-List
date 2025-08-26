@@ -25,6 +25,8 @@ import {
   Check,
   X
 } from 'lucide-react';
+import AddItemForm from '../../Forms/AddItemForm';
+import type { CreateShoppingItemDto, Category } from '../../../types/shopping';
 import './dashboard.css';
 
 interface DashboardStats {
@@ -64,6 +66,7 @@ const Dashboard: React.FC = () => {
   const [showProfilePanel, setShowProfilePanel] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
+  const [showAddItemForm, setShowAddItemForm] = useState(false);
   const [editedUser, setEditedUser] = useState<{
     name: string;
     surname: string;
@@ -163,11 +166,23 @@ const Dashboard: React.FC = () => {
   ];
 
   const toggleItemCompletion = (id: string) => {
-    setShoppingItems(prev => 
-      prev.map(item => 
+    setShoppingItems(prev => {
+      const updated = prev.map(item => 
         item.id === id ? { ...item, completed: !item.completed } : item
-      )
-    );
+      );
+      
+      // Update stats based on the change
+      const toggledItem = updated.find(item => item.id === id);
+      if (toggledItem) {
+        setStats(prevStats => ({
+          ...prevStats,
+          completed: updated.filter(item => item.completed).length,
+          pending: updated.filter(item => !item.completed).length
+        }));
+      }
+      
+      return updated;
+    });
   };
 
   const filteredItems = shoppingItems.filter(item => {
@@ -228,7 +243,32 @@ const Dashboard: React.FC = () => {
     );
   };
 
+  const handleAddItem = async (newItem: CreateShoppingItemDto) => {
+    const item: ShoppingItem = {
+      ...newItem,
+      id: Date.now().toString(),
+      completed: false,
+      isFavorite: false,
+      priority: newItem.priority || 'medium'
+    };
+    setShoppingItems(prev => [...prev, item]);
+    // Update stats
+    setStats(prev => ({
+      ...prev,
+      pending: prev.pending + 1,
+      totalValue: prev.totalValue + (newItem.price * newItem.quantity)
+    }));
+  };
+
   const favoriteItems = shoppingItems.filter(item => item.isFavorite);
+
+  const categoriesForForm: Category[] = categories.map(cat => ({
+    id: cat.name.toLowerCase().replace(' ', '-'),
+    name: cat.name,
+    icon: cat.icon,
+    color: cat.color,
+    description: `${cat.name} category`
+  }));
 
   return (
     <div className="modern-dashboard">
@@ -343,7 +383,7 @@ const Dashboard: React.FC = () => {
             <section className="shopping-list-section">
               <div className="section-header">
                 <h2>My Shopping List</h2>
-                <button className="add-item-btn">
+                <button className="add-item-btn" onClick={() => setShowAddItemForm(true)}>
                   <Plus size={16} />
                   Add Item
                 </button>
@@ -751,6 +791,15 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Add Item Form Modal */}
+      {showAddItemForm && (
+        <AddItemForm
+          categories={categoriesForForm}
+          onAddItem={handleAddItem}
+          onCancel={() => setShowAddItemForm(false)}
+        />
       )}
     </div>
   );

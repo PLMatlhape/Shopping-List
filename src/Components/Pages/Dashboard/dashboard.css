@@ -597,6 +597,7 @@
   border-radius: 12px;
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 .item-card:hover {
@@ -1275,10 +1276,10 @@
   padding: 0.5rem;
   border-radius: 50%;
   transition: all 0.2s ease;
-  margin-left: auto;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .favorite-btn:hover {
@@ -1286,13 +1287,4 @@
   transform: scale(1.1);
 }
 
-/* Update item card to accommodate favorite button */
-.item-card {
-  position: relative;
-}
-
-.item-card .favorite-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-}
+/* Remove the absolute positioning that was causing overlay issues */
