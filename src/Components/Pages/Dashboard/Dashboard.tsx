@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { 
   Search, 
   Calendar, 
@@ -8,7 +7,7 @@ import {
   Grid3X3, 
   Heart, 
   Package, 
-  MessageCircle, 
+  History as HistoryIcon, 
   Settings, 
   LogOut,
   Filter,
@@ -22,10 +21,10 @@ import {
   Camera, 
   Save,
   Edit3,
-  Check,
   X
 } from 'lucide-react';
 import AddItemForm from '../../Forms/AddItemForm';
+import History from '../../History/History';
 import type { CreateShoppingItemDto, Category } from '../../../types/shopping';
 import './dashboard.css';
 
@@ -49,7 +48,6 @@ interface ShoppingItem {
 }
 
 const Dashboard: React.FC = () => {
-  const navigate = useNavigate();
   
   const avatarOptions = [
     { id: 'boy', name: 'Boy Avatar', path: '/Image/Boy-avator.png' },
@@ -80,69 +78,14 @@ const Dashboard: React.FC = () => {
     avatar: string;
   } | null>(null);
   const [stats, setStats] = useState<DashboardStats>({
-    completed: 1,
-    pending: 4,
-    highPriority: 1,
-    totalValue: 9790.92
+    completed: 0,
+    pending: 0,
+    highPriority: 0,
+    totalValue: 0.00
   });
   
-  const [shoppingItems, setShoppingItems] = useState<ShoppingItem[]>([
-    {
-      id: '1',
-      name: 'Organic Strawberries',
-      price: 250.00,
-      unit: 'per kg',
-      category: 'Fruits',
-      priority: 'high',
-      completed: true,
-      quantity: 2,
-      isFavorite: true
-    },
-    {
-      id: '2',
-      name: 'Fresh Cabbage',
-      price: 180.50,
-      unit: 'per head',
-      category: 'Vegetables',
-      priority: 'medium',
-      completed: false,
-      quantity: 1,
-      isFavorite: false
-    },
-    {
-      id: '3',
-      name: 'Premium Beef',
-      price: 450.00,
-      unit: 'per kg',
-      category: 'Meat',
-      priority: 'high',
-      completed: false,
-      quantity: 1,
-      isFavorite: true
-    },
-    {
-      id: '4',
-      name: 'Fresh Orange Juice',
-      price: 89.99,
-      unit: 'per bottle',
-      category: 'Drinks',
-      priority: 'low',
-      completed: false,
-      quantity: 3,
-      isFavorite: false
-    },
-    {
-      id: '5',
-      name: 'Whole Grain Bread',
-      price: 45.00,
-      unit: 'per loaf',
-      category: 'Bread',
-      priority: 'medium',
-      completed: false,
-      quantity: 2,
-      isFavorite: true
-    }
-  ]);
+  const [shoppingItems, setShoppingItems] = useState<ShoppingItem[]>([]);
+  const [collectedItems, setCollectedItems] = useState<ShoppingItem[]>([]);
 
   const categories = [
     { name: 'Fruits', icon: '🍎', color: '#ff6b6b' },
@@ -160,41 +103,110 @@ const Dashboard: React.FC = () => {
     { icon: Grid3X3, label: 'Dashboard', key: 'dashboard' },
     { icon: Heart, label: 'Favourite', key: 'favourite' },
     { icon: Package, label: 'Collected/Purchased', key: 'orders' },
-    { icon: MessageCircle, label: 'Messages', key: 'messages' },
+    { icon: HistoryIcon, label: 'History', key: 'history' },
     { icon: TrendingUp, label: 'Top Deals', key: 'deals' },
     { icon: Settings, label: 'Settings', key: 'settings' }
   ];
 
   const toggleItemCompletion = (id: string) => {
-    setShoppingItems(prev => {
-      const updated = prev.map(item => 
-        item.id === id ? { ...item, completed: !item.completed } : item
-      );
+    // Check if item is in shopping items (incomplete items)
+    const shoppingItem = shoppingItems.find(item => item.id === id);
+    
+    if (shoppingItem && !shoppingItem.completed) {
+      // Item is being marked as complete - move to collected items
+      const completedItem = { ...shoppingItem, completed: true };
       
-      // Update stats based on the change
-      const toggledItem = updated.find(item => item.id === id);
-      if (toggledItem) {
+      // Add to history
+      addToHistory(completedItem, 'purchased');
+      
+      // Use functional updates to prevent race conditions
+      setCollectedItems(prevCollected => {
+        // Check if item already exists in collected items to prevent duplicates
+        const exists = prevCollected.some(item => item.id === id);
+        if (exists) return prevCollected;
+        return [...prevCollected, completedItem];
+      });
+      
+      // Remove from shopping items
+      setShoppingItems(prev => prev.filter(item => item.id !== id));
+      
+      // Update stats
+      setStats(prevStats => ({
+        ...prevStats,
+        completed: prevStats.completed + 1,
+        pending: prevStats.pending - 1,
+        totalValue: prevStats.totalValue - (shoppingItem.price * shoppingItem.quantity),
+        highPriority: shoppingItem.priority === 'high' 
+          ? prevStats.highPriority - 1 
+          : prevStats.highPriority
+      }));
+    } else {
+      // Item must be in collected items - move back to shopping items
+      const collectedItem = collectedItems.find(item => item.id === id);
+      if (collectedItem && collectedItem.completed) {
+        const incompleteItem = { ...collectedItem, completed: false };
+        
+        // Add to history as "removed" from purchased
+        addToHistory(incompleteItem, 'removed');
+        
+        // Use functional updates to prevent race conditions
+        setShoppingItems(prev => {
+          // Check if item already exists in shopping items to prevent duplicates
+          const exists = prev.some(item => item.id === id);
+          if (exists) return prev;
+          return [...prev, incompleteItem];
+        });
+        
+        // Remove from collected items
+        setCollectedItems(prev => prev.filter(item => item.id !== id));
+        
+        // Update stats
         setStats(prevStats => ({
           ...prevStats,
-          completed: updated.filter(item => item.completed).length,
-          pending: updated.filter(item => !item.completed).length
+          completed: prevStats.completed - 1,
+          pending: prevStats.pending + 1,
+          totalValue: prevStats.totalValue + (collectedItem.price * collectedItem.quantity),
+          highPriority: collectedItem.priority === 'high' 
+            ? prevStats.highPriority + 1 
+            : prevStats.highPriority
         }));
       }
-      
-      return updated;
-    });
+    }
+  };
+
+  // History tracking functions
+  const addToHistory = (item: ShoppingItem, action: 'added' | 'purchased' | 'removed') => {
+    const historyEntry = {
+      id: `history-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      itemId: item.id,
+      itemName: item.name,
+      itemCategory: item.category,
+      itemPrice: item.price,
+      itemQuantity: item.quantity,
+      itemPriority: item.priority,
+      action,
+      timestamp: new Date().toISOString(),
+      date: new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+    };
+
+    const existingHistory = JSON.parse(localStorage.getItem('shoppingHistory') || '[]');
+    const updatedHistory = [historyEntry, ...existingHistory];
+    localStorage.setItem('shoppingHistory', JSON.stringify(updatedHistory));
   };
 
   const filteredItems = shoppingItems.filter(item => {
+    // Only show incomplete items since completed items are moved to collectedItems
+    // Added extra safety check to ensure no completed items slip through
+    if (item.completed) return false;
+    
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'All Categories' || item.category === selectedCategory;
     const matchesPriority = selectedPriority === 'All Priorities' || item.priority === selectedPriority;
-    const matchesCompleted = showCompleted || !item.completed;
     
-    return matchesSearch && matchesCategory && matchesPriority && matchesCompleted;
+    return matchesSearch && matchesCategory && matchesPriority;
   });
 
-  const completionPercentage = (stats.completed / (stats.completed + stats.pending)) * 100;
+  const completionPercentage = stats.pending === 0 ? 100 : (stats.completed / (stats.completed + stats.pending)) * 100;
 
   // Update progress bar width
   useEffect(() => {
@@ -224,6 +236,20 @@ const Dashboard: React.FC = () => {
     }
   }, []);
 
+  // Cleanup effect to ensure no completed items remain in shopping list
+  useEffect(() => {
+    setShoppingItems(prevItems => {
+      const incompleteItems = prevItems.filter(item => !item.completed);
+      const completedItems = prevItems.filter(item => item.completed);
+      
+      if (completedItems.length > 0) {
+        setCollectedItems(prevCollected => [...prevCollected, ...completedItems]);
+      }
+      
+      return incompleteItems;
+    });
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem('userInfo');
     window.location.href = '/';
@@ -234,33 +260,53 @@ const Dashboard: React.FC = () => {
   };
 
   const toggleFavorite = (itemId: string) => {
-    setShoppingItems(prevItems => 
-      prevItems.map(item => 
-        item.id === itemId 
-          ? { ...item, isFavorite: !item.isFavorite }
-          : item
-      )
-    );
+    // Check if item is in shopping items
+    const shoppingItem = shoppingItems.find(item => item.id === itemId);
+    if (shoppingItem) {
+      setShoppingItems(prevItems => 
+        prevItems.map(item => 
+          item.id === itemId 
+            ? { ...item, isFavorite: !item.isFavorite }
+            : item
+        )
+      );
+    } else {
+      // Item must be in collected items
+      setCollectedItems(prevItems => 
+        prevItems.map(item => 
+          item.id === itemId 
+            ? { ...item, isFavorite: !item.isFavorite }
+            : item
+        )
+      );
+    }
   };
 
   const handleAddItem = async (newItem: CreateShoppingItemDto) => {
     const item: ShoppingItem = {
       ...newItem,
-      id: Date.now().toString(),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, // More unique ID
       completed: false,
       isFavorite: false,
       priority: newItem.priority || 'medium'
     };
+    
+    // Add to history
+    addToHistory(item, 'added');
+    
     setShoppingItems(prev => [...prev, item]);
     // Update stats
     setStats(prev => ({
       ...prev,
       pending: prev.pending + 1,
-      totalValue: prev.totalValue + (newItem.price * newItem.quantity)
+      totalValue: prev.totalValue + (newItem.price * newItem.quantity),
+      highPriority: newItem.priority === 'high' 
+        ? prev.highPriority + 1 
+        : prev.highPriority
     }));
   };
 
-  const favoriteItems = shoppingItems.filter(item => item.isFavorite);
+  const favoriteItems = [...shoppingItems, ...collectedItems].filter(item => item.isFavorite);
 
   const categoriesForForm: Category[] = categories.map(cat => ({
     id: cat.name.toLowerCase().replace(' ', '-'),
@@ -511,46 +557,61 @@ const Dashboard: React.FC = () => {
 
               {/* Items List */}
               <div className="items-list">
-                {filteredItems.map((item) => (
-                  <div key={item.id} className={`item-card ${item.completed ? 'completed' : ''}`}>
-                    <div className="item-checkbox">
-                      <input
-                        type="checkbox"
-                        checked={item.completed}
-                        onChange={() => toggleItemCompletion(item.id)}
-                        title={`Mark ${item.name} as ${item.completed ? 'incomplete' : 'complete'}`}
-                        aria-label={`Mark ${item.name} as ${item.completed ? 'incomplete' : 'complete'}`}
-                      />
-                    </div>
-                    <div className="item-content">
-                      <h4 className="item-name">{item.name}</h4>
-                      <div className="item-details">
-                        <span className="item-category">{item.category}</span>
-                        <span className={`item-priority ${item.priority}`}>
-                          {item.priority.toUpperCase()}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="item-quantity">
-                      <span>Qty: {item.quantity}</span>
-                    </div>
-                    <div className="item-price">
-                      <span>R{item.price.toFixed(2)}</span>
-                      <small>{item.unit}</small>
-                    </div>
+                {filteredItems.length === 0 ? (
+                  <div className="empty-shopping-list">
+                    <ShoppingCart size={48} color="#ddd" />
+                    <h3>Your shopping list is empty</h3>
+                    <p>Add items to get started with your shopping</p>
                     <button 
-                      className="favorite-btn"
-                      onClick={() => toggleFavorite(item.id)}
-                      title={item.isFavorite ? "Remove from favorites" : "Add to favorites"}
+                      className="add-first-item-btn"
+                      onClick={() => setShowAddItemForm(true)}
                     >
-                      <Heart 
-                        size={18} 
-                        fill={item.isFavorite ? "#ff4757" : "none"}
-                        color={item.isFavorite ? "#ff4757" : "#ccc"}
-                      />
+                      <Plus size={16} />
+                      Add Your First Item
                     </button>
                   </div>
-                ))}
+                ) : (
+                  filteredItems.map((item) => (
+                    <div key={item.id} className={`item-card ${item.completed ? 'completed' : ''}`}>
+                      <div className="item-checkbox">
+                        <input
+                          type="checkbox"
+                          checked={item.completed}
+                          onChange={() => toggleItemCompletion(item.id)}
+                          title={`Mark ${item.name} as ${item.completed ? 'incomplete' : 'complete'}`}
+                          aria-label={`Mark ${item.name} as ${item.completed ? 'incomplete' : 'complete'}`}
+                        />
+                      </div>
+                      <div className="item-content">
+                        <h4 className="item-name">{item.name}</h4>
+                        <div className="item-details">
+                          <span className="item-category">{item.category}</span>
+                          <span className={`item-priority ${item.priority}`}>
+                            {item.priority.toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="item-quantity">
+                        <span>Qty: {item.quantity}</span>
+                      </div>
+                      <div className="item-price">
+                        <span>R{item.price.toFixed(2)}</span>
+                        <small>{item.unit}</small>
+                      </div>
+                      <button 
+                        className="favorite-btn"
+                        onClick={() => toggleFavorite(item.id)}
+                        title={item.isFavorite ? "Remove from favorites" : "Add to favorites"}
+                      >
+                        <Heart 
+                          size={18} 
+                          fill={item.isFavorite ? "#ff4757" : "none"}
+                          color={item.isFavorite ? "#ff4757" : "#ccc"}
+                        />
+                      </button>
+                    </div>
+                  ))
+                )}
               </div>
             </section>
           </div>
@@ -606,6 +667,78 @@ const Dashboard: React.FC = () => {
                 </div>
               )}
             </section>
+          </div>
+        )}
+
+        {/* Collected/Purchased Section */}
+        {activeSection === 'orders' && (
+          <div className="dashboard-content">
+            <section className="collected-section">
+              <div className="section-header">
+                <h2>Collected/Purchased Items</h2>
+                <p className="section-subtitle">Items you have successfully collected</p>
+              </div>
+
+              {collectedItems.length === 0 ? (
+                <div className="empty-collected">
+                  <Package size={48} color="#ddd" />
+                  <h3>No collected items yet</h3>
+                  <p>Items will appear here when you mark them as completed</p>
+                </div>
+              ) : (
+                <div className="collected-stats">
+                  <div className="stat-card">
+                    <h3>{collectedItems.length}</h3>
+                    <p>Items Collected</p>
+                  </div>
+                  <div className="stat-card">
+                    <h3>R{collectedItems.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2)}</h3>
+                    <p>Total Spent</p>
+                  </div>
+                </div>
+              )}
+
+              {collectedItems.length > 0 && (
+                <div className="collected-grid">
+                  {collectedItems.map((item) => (
+                    <div key={item.id} className="collected-item-card">
+                      <div className="collected-item-header">
+                        <h4 className="item-name">{item.name}</h4>
+                        <div className="completion-badge">✓ Completed</div>
+                      </div>
+                      <div className="item-details">
+                        <span className="item-category">{item.category}</span>
+                        <span className={`item-priority ${item.priority}`}>
+                          {item.priority}
+                        </span>
+                      </div>
+                      <div className="item-pricing">
+                        <span className="item-price">R{item.price.toFixed(2)}</span>
+                        <small className="item-unit">{item.unit}</small>
+                      </div>
+                      <div className="item-actions">
+                        <span className="item-quantity">Qty: {item.quantity}</span>
+                        <span className="total-cost">Total: R{(item.price * item.quantity).toFixed(2)}</span>
+                        <button 
+                          className="uncomplete-btn"
+                          onClick={() => toggleItemCompletion(item.id)}
+                          title="Mark as incomplete"
+                        >
+                          ↩ Move Back
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          </div>
+        )}
+
+        {/* History Section */}
+        {activeSection === 'history' && (
+          <div className="dashboard-content">
+            <History />
           </div>
         )}
       </main>
