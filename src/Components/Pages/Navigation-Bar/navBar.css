@@ -99,6 +99,25 @@ nav {
     background: rgba(56, 161, 105, 0.1);
 }
 
+/* Dashboard button in nav */
+.nav-dashboard-btn {
+    background: none;
+    border: none;
+    color: #2D3748;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-dashboard-btn:hover {
+    color: #38a169;
+    background: rgba(56, 161, 105, 0.1);
+}
+
 /* SignUp button uses global .btn-primary styles with responsive sizing */
 .signup-btn {
     font-size: 0.9rem;

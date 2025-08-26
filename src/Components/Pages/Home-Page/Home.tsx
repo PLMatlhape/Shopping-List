@@ -7,7 +7,7 @@ const Home: React.FC = () => {
     const navigate = useNavigate();
 
     const handleMakeListClick = () => {
-        navigate('/login');
+        navigate('/dashboard');
     };
 
     const handleCategoryClick = (categoryId: string) => {
