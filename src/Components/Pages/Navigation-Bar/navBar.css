@@ -1,10 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* Scoped reset for navbar only - removed global * selector */
 
 header {
     padding: 0.8rem 0;
@@ -20,20 +16,33 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: var(--container-max-width, 1200px);
+    width: 100%;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 var(--container-padding-mobile, 1rem);
     font-family: 'Montserrat', sans-serif;
     height: 60px;
+    box-sizing: border-box;
 }
 
 .logo {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    color: #2d3748;
+    color: var(--text-primary, #2d3748);
+    margin-left: 0;
+    padding-left: 0;
+    transition: color 0.2s ease;
+}
+
+.logo.clickable {
+    cursor: pointer;
+}
+
+.logo.clickable:hover {
+    color: var(--primary-green, #38a169);
 }
 
 .logo::before {
@@ -44,13 +53,28 @@ nav {
     width: 78px;
     height: 78px;
     object-fit: contain;
+    margin: 0; /* Ensure no unwanted margins */
 }
 
 .nav-links {
-    display: flex;
+    display: none;
     list-style: none;
     gap: 2.5rem;
     align-items: center;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-left: 0;
+}
+
+.nav-links.active {
+    display: flex;
 }
 
 .nav-links a {
@@ -60,8 +84,9 @@ nav {
     font-size: 0.95rem;
     transition: all 0.2s ease;
     position: relative;
-    padding: 8px 16px;
+    padding: 0.5rem 2rem;
     border-radius: 6px;
+    display: block;
 }
 
 .nav-links a:hover {
@@ -74,27 +99,14 @@ nav {
     background: rgba(56, 161, 105, 0.1);
 }
 
+/* SignUp button uses global .btn-primary styles with responsive sizing */
 .signup-btn {
-    background: #38a169;
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
 }
 
-.signup-btn:hover {
-    background: #2f855a;
-    transform: translateY(-1px);
-}
-
-/* Mobile menu button */
+/* Mobile menu button - visible by default (mobile first) */
 .mobile-menu-btn {
-    display: none;
+    display: block;
     background: none;
     border: none;
     font-size: 1.25rem;
@@ -103,61 +115,77 @@ nav {
     padding: 4px;
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-    nav {
-        padding: 0 2rem;
+/* Mobile First Responsive Design */
+
+/* Small Mobile (480px+) */
+@media (min-width: 480px) {
+    .logo {
+        font-size: 1.2rem;
+    }
+    
+    .logo img {
+        width: 70px;
+        height: 70px;
     }
 }
 
-@media (max-width: 968px) {
+/* Large Mobile (640px+) */
+@media (min-width: 640px) {
     nav {
-        height: 60px;
-    }
-
-    .mobile-menu-btn {
-        display: block;
-    }
-
-    .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: white;
-        padding: 1rem;
-        flex-direction: column;
-        gap: 0.75rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        margin-left: 0;
-    }
-
-    .nav-links.active {
-        display: flex;
-    }
-
-    .nav-links a {
-        display: block;
-        padding: 0.5rem 2rem;
-    }
-
-    .signup-btn {
-        padding: 8px 16px;
-    }
-}
-
-@media (max-width: 640px) {
-    nav {
-        padding: 0 1rem;
+        padding: 0 var(--container-padding, 2rem);
     }
 
     .logo {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
     }
 
     .signup-btn {
-        font-size: 0.9rem;
-        padding: 6px 14px;
+        font-size: 0.95rem;
+        padding: 10px 20px;
+    }
+}
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+    .nav-links {
+        display: flex;
+        position: static;
+        background: transparent;
+        padding: 0;
+        flex-direction: row;
+        gap: 2.5rem;
+        box-shadow: none;
+        margin-left: 0;
+    }
+
+    .nav-links a {
+        display: inline;
+        padding: 8px 16px;
+    }
+
+    .mobile-menu-btn {
+        display: none;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    .signup-btn {
+        padding: 12px 24px;
+    }
+}
+
+/* Laptop (1024px+) */
+@media (min-width: 1024px) {
+    nav {
+        height: 60px;
+    }
+}
+
+/* Desktop (1200px+) */
+@media (min-width: 1200px) {
+    nav {
+        padding: 0 var(--container-padding, 2rem);
     }
 }

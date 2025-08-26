@@ -1,17 +1,27 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './navBar.css';
 
 const NavBar: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
+    const handleSignUpClick = () => {
+        navigate('/login');
+    };
+
+    const handleLogoClick = () => {
+        navigate('/');
+    };
+
     return (
         <header>
             <nav>
-                <div className="logo">
+                <div className="logo clickable" onClick={handleLogoClick}>
                     <img src="/Image/Logo.png" alt="Shopping List Logo" />
                     Shopping List
                 </div>
@@ -22,7 +32,7 @@ const NavBar: React.FC = () => {
                     <li><a href="#services">Services</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
-                <button className="signup-btn">SignUp</button>
+                <button className="signup-btn btn-primary" onClick={handleSignUpClick}>SignUp</button>
                 <button className="mobile-menu-btn" onClick={toggleMenu}>
                     {isMenuOpen ? '✕' : '☰'}
                 </button>
