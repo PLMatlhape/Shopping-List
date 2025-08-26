@@ -1,14 +1,15 @@
-body {
+/* Remove body styles that conflict with router */
+.home-page {
     font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
-    min-height: 100vh;
     color: #2D3748;
+    width: 100%;
+    min-height: 100vh;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 80px 2rem 0 2rem;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 /* Hero Section */
@@ -17,8 +18,10 @@ body {
     grid-template-columns: 1fr 1fr;
     align-items: center;
     gap: 4rem;
-    padding: 6rem 0 4rem;
+    padding: 6rem 4rem 4rem;
     min-height: 600px;
+    width: 100%;
+    margin: 0;
 }
 
 .hero-content h1 {
@@ -156,7 +159,9 @@ body {
 
 /* Categories Section */
 .categories {
-    padding: 4rem 0;
+    padding: 4rem;
+    width: 100%;
+    margin: 0;
 }
 
 .section-header {
@@ -229,8 +234,12 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1200px) {
-    .container {
-        padding: 80px 1.5rem 0 1.5rem;
+    .hero {
+        padding: 6rem 2rem 4rem;
+    }
+    
+    .categories {
+        padding: 4rem 2rem;
     }
 }
 
@@ -274,8 +283,12 @@ body {
 }
 
 @media (max-width: 640px) {
-    .container {
-        padding: 80px 1rem 0 1rem;
+    .hero {
+        padding: 4rem 1rem;
+    }
+
+    .categories {
+        padding: 4rem 1rem;
     }
 
     .hero-content h1 {

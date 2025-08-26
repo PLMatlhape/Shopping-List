@@ -1,11 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './navBar.css';
 
 const NavBar: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
+    };
+
+    const handleSignUpClick = () => {
+        navigate('/signup');
     };
 
     return (
@@ -22,7 +28,7 @@ const NavBar: React.FC = () => {
                     <li><a href="#services">Services</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
-                <button className="signup-btn">SignUp</button>
+                <button className="signup-btn" onClick={handleSignUpClick}>SignUp</button>
                 <button className="mobile-menu-btn" onClick={toggleMenu}>
                     {isMenuOpen ? '✕' : '☰'}
                 </button>

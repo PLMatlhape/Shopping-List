@@ -1,15 +1,23 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './home.css';
 
 const Home: React.FC = () => {
+    const navigate = useNavigate();
+
+    const handleMakeListClick = () => {
+        navigate('/login');
+    };
+
     return (
-        <main className="container">
+        <div className="home-page">
+            <main className="container">
             <section className="hero">
                 <div className="hero-content">
                     <h1>Organize Your<br />Perfect <span className="highlight">Shopping List</span><br />Effortlessly</h1>
                     <p>Create, manage, and organize your shopping lists to never forget essential items. Make grocery shopping simple and efficient for your family's needs.</p>
                     <div className="cta-buttons">
-                        <button className="shop-btn">Make List</button>
+                        <button className="shop-btn" onClick={handleMakeListClick}>Make List</button>
                         <div className="order-process">
                             <button className="play-btn" title="Play Order Process Video"></button>
                             Order Process
@@ -66,6 +74,7 @@ const Home: React.FC = () => {
                 </div>
             </section>
         </main>
+        </div>
     );
 };
 
