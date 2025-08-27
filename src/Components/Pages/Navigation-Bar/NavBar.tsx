@@ -10,10 +10,10 @@ const NavBar: React.FC = () => {
 
     return (
         <header>
-            <nav>
+            <nav className="navbar">
                 <div className="logo">
                     <img src="/Image/Logo.png" alt="Shopping List Logo" />
-                    Shopping List
+                    <span>Shopping List</span>
                 </div>
                 <ul className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
                     <li><a href="#home" className="active">Home</a></li>
@@ -22,7 +22,7 @@ const NavBar: React.FC = () => {
                     <li><a href="#services">Services</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
-                <button className="signup-btn">SignUp</button>
+                <button className="signup-btn">Sign Up</button>
                 <button className="mobile-menu-btn" onClick={toggleMenu}>
                     {isMenuOpen ? '✕' : '☰'}
                 </button>
