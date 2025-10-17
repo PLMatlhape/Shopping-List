@@ -3,7 +3,6 @@
 /* Scoped reset for navbar only - removed global * selector */
 
 header {
-    padding: 0.8rem 0;
     background: transparent;
     position: sticky;
     width: 100%;
@@ -12,54 +11,28 @@ header {
     box-shadow: none;
 }
 
-nav {
+.navbar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    max-width: var(--container-max-width, 1200px);
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 var(--container-padding-mobile, 1rem);
-    font-family: 'Montserrat', sans-serif;
-    height: 60px;
-    box-sizing: border-box;
+
 }
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-primary, #2d3748);
-    margin-left: 0;
-    padding-left: 0;
-    transition: color 0.2s ease;
-}
 
-.logo.clickable {
-    cursor: pointer;
-}
-
-.logo.clickable:hover {
-    color: var(--primary-green, #38a169);
-}
-
-.logo::before {
-    display: none;
 }
 
 .logo img {
-    width: 78px;
-    height: 78px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
     margin: 0; /* Ensure no unwanted margins */
 }
 
 .nav-links {
-    display: none;
+
     list-style: none;
-    gap: 2.5rem;
     align-items: center;
     position: absolute;
     top: 100%;
@@ -79,29 +52,22 @@ nav {
 
 .nav-links a {
     text-decoration: none;
-    color: #4A5568;
+    color: #2D3748;
     font-weight: 500;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-    position: relative;
-    padding: 0.5rem 2rem;
-    border-radius: 6px;
-    display: block;
+
 }
 
 .nav-links a:hover {
-    color: #38a169;
+    color: #38A169;
 }
 
 .nav-links a.active {
-    color: #38a169;
-    border: 2px solid #38a169;
-    background: rgba(56, 161, 105, 0.1);
+    color: #38A169;
 }
 
 /* SignUp button uses global .btn-primary styles with responsive sizing */
 .signup-btn {
-    font-size: 0.9rem;
+
 }
 
 /* Mobile menu button - visible by default (mobile first) */
@@ -111,37 +77,25 @@ nav {
     border: none;
     font-size: 1.25rem;
     cursor: pointer;
-    color: #38a169;
+    color: #38A169;
     padding: 4px;
 }
 
-/* Mobile First Responsive Design */
 
-/* Small Mobile (480px+) */
-@media (min-width: 480px) {
-    .logo {
-        font-size: 1.2rem;
-    }
-    
-    .logo img {
-        width: 70px;
-        height: 70px;
     }
 }
 
 /* Large Mobile (640px+) */
 @media (min-width: 640px) {
     nav {
-        padding: 0 var(--container-padding, 2rem);
+
     }
 
     .logo {
         font-size: 1.3rem;
     }
 
-    .signup-btn {
-        font-size: 0.95rem;
-        padding: 10px 20px;
+
     }
 }
 
@@ -159,33 +113,8 @@ nav {
     }
 
     .nav-links a {
-        display: inline;
-        padding: 8px 16px;
+
     }
 
-    .mobile-menu-btn {
-        display: none;
-    }
-
-    .logo {
-        font-size: 1.5rem;
-    }
-
-    .signup-btn {
-        padding: 12px 24px;
-    }
-}
-
-/* Laptop (1024px+) */
-@media (min-width: 1024px) {
-    nav {
-        height: 60px;
-    }
-}
-
-/* Desktop (1200px+) */
-@media (min-width: 1200px) {
-    nav {
-        padding: 0 var(--container-padding, 2rem);
     }
 }
