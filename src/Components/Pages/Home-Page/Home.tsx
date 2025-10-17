@@ -1,15 +1,35 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import Categories from '../Categories-Section/Categories';
 import './home.css';
 
 const Home: React.FC = () => {
+    const navigate = useNavigate();
+
+    const handleMakeListClick = () => {
+        navigate('/login');
+    };
+
+    const handleCategoryClick = (categoryId: string) => {
+        console.log('Category clicked:', categoryId);
+        // Future: Navigate to category page
+        // navigate(`/categories/${categoryId}`);
+    };
+
+    const handleSeeAllClick = () => {
+        console.log('See all categories clicked');
+        // Future: Navigate to all categories page
+        // navigate('/categories');
+    };
+
     return (
-        <main className="container">
+        <main className="home-container">
             <section className="hero">
                 <div className="hero-content">
                     <h1>Organize Your<br />Perfect <span className="highlight">Shopping List</span><br />Effortlessly</h1>
                     <p>Create, manage, and organize your shopping lists to never forget essential items. Make grocery shopping simple and efficient for your family's needs.</p>
                     <div className="cta-buttons">
-                        <button className="shop-btn">Make List</button>
+                        <button className="shop-btn btn-primary" onClick={handleMakeListClick}>Make List</button>
                         <div className="order-process">
                             <button className="play-btn" title="Play Order Process Video"></button>
                             Order Process
@@ -29,44 +49,17 @@ const Home: React.FC = () => {
                 </div>
             </section>
 
-            <section className="categories">
-                <div className="section-header">
-                    <h2>Popular Categories</h2>
-                    <button className="see-all">See All →</button>
-                </div>
-                
-                <div className="category-grid">
-                    <div className="category-card">
-                        <div className="category-icon meat-icon">
-                            <img src="/Image/Meat.png" alt="Fresh Meat" />
-                        </div>
-                        <h3>Fresh Meat</h3>
-                    </div>
-                    
-                    <div className="category-card">
-                        <div className="category-icon pizza-icon">
-                            <img src="/Image/Fast-Food.png" alt="Fast Food" />
-                        </div>
-                        <h3>Fast Food</h3>
-                    </div>
-                    
-                    <div className="category-card">
-                        <div className="category-icon nuts-icon">
-                            <img src="/Image/Fruits-Veg.png" alt="Fruits & Vegetables" />
-                        </div>
-                        <h3>Fruits & Vegetables</h3>
-                    </div>
-                    
-                    <div className="category-card">
-                        <div className="category-icon spices-icon">
-                            <img src="/Image/Spices.png" alt="Spices" />
-                        </div>
-                        <h3>Spices</h3>
-                    </div>
-                </div>
-            </section>
+            <Categories 
+                onCategoryClick={handleCategoryClick}
+                onSeeAllClick={handleSeeAllClick}
+            />
         </main>
     );
 };
 
 export default Home;
+
+
+
+
+
