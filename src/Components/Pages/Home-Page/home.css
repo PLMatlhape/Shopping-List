@@ -1,12 +1,4 @@
-/* Container using global responsive utilities */
-.home-container {
-    max-width: var(--container-max-width, 1200px);
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 var(--container-padding, 2rem);
-    box-sizing: border-box;
-    background: transparent;
-    flex: 1;
+
 }
 
 /* Hero Section - Mobile First Base Styles */
@@ -14,16 +6,6 @@
     display: grid;
     grid-template-columns: 1fr;
     align-items: center;
-    gap: 3rem;
-    padding: 4rem 0 3rem;
-    min-height: 500px;
-    margin: 0;
-    text-align: center;
-}
-
-.hero-content {
-    padding-left: 0;
-    margin-left: 0;
 }
 
 .hero-content h1 {
@@ -151,13 +133,6 @@
     color: #666;
     font-size: 0.8rem;
 }
-
-/* Mobile First Responsive Design */
-
-/* Very Small Mobile (0-480px) */
-@media (max-width: 480px) {
-    .home-container {
-        padding: 0 1rem;
     }
     
     .hero {
@@ -202,10 +177,6 @@
     }
 }
 
-/* Large Mobile (640px+) */
-@media (min-width: 640px) {
-    .home-container {
-        padding: 0 var(--container-padding, 2rem);
     }
 
     .hero-content h1 {

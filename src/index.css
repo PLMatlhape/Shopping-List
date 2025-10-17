@@ -26,10 +26,6 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  font-family: 'Montserrat', 'Roboto', sans-serif;
-  color: #2D3748;
-  background: transparent;
-  overflow-x: hidden;
 }
 
 h1 {

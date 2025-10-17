@@ -11,15 +11,6 @@ const NavBar: React.FC = () => {
     };
 
     const handleSignUpClick = () => {
-        navigate('/login');
-    };
-
-    const handleDashboardClick = () => {
-        navigate('/dashboard');
-    };
-
-    const handleLogoClick = () => {
-        navigate('/');
     };
 
     return (
@@ -37,7 +28,7 @@ const NavBar: React.FC = () => {
                     <li><a href="#services">Services</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
-                <button className="signup-btn btn-primary" onClick={handleSignUpClick}>SignUp</button>
+
                 <button className="mobile-menu-btn" onClick={toggleMenu}>
                     {isMenuOpen ? '✕' : '☰'}
                 </button>
