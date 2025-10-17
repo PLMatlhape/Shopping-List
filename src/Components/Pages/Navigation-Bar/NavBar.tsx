@@ -14,6 +14,10 @@ const NavBar: React.FC = () => {
         navigate('/login');
     };
 
+    const handleDashboardClick = () => {
+        navigate('/dashboard');
+    };
+
     const handleLogoClick = () => {
         navigate('/');
     };
@@ -27,6 +31,7 @@ const NavBar: React.FC = () => {
                     <li><a href="#home" className="active">Home</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#categories">Categories</a></li>
+                    <li><button onClick={handleDashboardClick} className="nav-dashboard-btn">Dashboard</button></li>
                     <li><a href="#services">Services</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>

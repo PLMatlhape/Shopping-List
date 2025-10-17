@@ -1,0 +1,200 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "John",
+      "surname": "Doe",
+      "email": "john.doe@example.com",
+      "cellNumber": "+27 123 456 7890",
+      "createdAt": "2025-08-26T10:00:00.000Z"
+    },
+    {
+      "id": "1756202536598",
+      "name": "Pule",
+      "surname": "Matlhape",
+      "email": "pulelebogang468@gmail.com",
+      "cellNumber": "+27778907899",
+      "loginTime": "2025-08-26T11:08:10.727Z",
+      "avatar": "/Image/Boy-avator.png",
+      "joinDate": "2025-08-26T11:08:10.727Z"
+    },
+    {
+      "id": "1756202973220",
+      "name": "Mosasy",
+      "surname": "smithsy",
+      "email": "smithsy@gmail.com",
+      "cellNumber": "+27778907890",
+      "password": "smithsy@",
+      "createdAt": "2025-08-26T10:09:33.220Z"
+    },
+    {
+      "id": "1756207661059",
+      "name": "Mosasy",
+      "surname": "smithsy",
+      "email": "smithsy@gmail.co",
+      "cellNumber": "+27778907890",
+      "loginTime": "2025-08-26T11:27:48.317Z",
+      "avatar": "/Image/Girl-avator.png",
+      "joinDate": "2025-08-26T11:27:48.317Z"
+    },
+    {
+      "id": "1756209238108",
+      "name": "Mosasy",
+      "surname": "smithsy",
+      "email": "smithsy@gmail.co",
+      "cellNumber": "+27778907890",
+      "loginTime": "2025-08-26T11:54:05.439Z",
+      "avatar": "/Image/Boy-avator.png",
+      "joinDate": "2025-08-26T11:54:05.439Z"
+    },
+    {
+      "id": "1756210781547",
+      "name": "Mosasy",
+      "surname": "smithsy",
+      "email": "smithsy@gmail.co",
+      "cellNumber": "+27778907890",
+      "password": "smithsy@",
+      "createdAt": "2025-08-26T12:19:41.547Z"
+    },
+    {
+      "id": "1756211051462",
+      "name": "Pule",
+      "surname": "Matlhape",
+      "email": "pulelebogang468@gmail.com",
+      "cellNumber": "+27778907899",
+      "password": "pulelebogang468@gmail.com",
+      "createdAt": "2025-08-26T12:24:11.462Z"
+    }
+  ],
+  "shoppingLists": [
+    {
+      "id": "1",
+      "userId": "1",
+      "name": "Weekly Groceries",
+      "createdAt": "2025-08-26T10:00:00.000Z",
+      "updatedAt": "2025-08-26T10:00:00.000Z",
+      "isCompleted": false
+    }
+  ],
+  "shoppingItems": [
+    {
+      "id": "1",
+      "listId": "1",
+      "name": "Apples",
+      "quantity": 6,
+      "unit": "pieces",
+      "price": 25.99,
+      "category": "Fruits",
+      "isCompleted": false,
+      "priority": "medium",
+      "notes": "Red apples preferred",
+      "image": "/Image/Fruits-Veg.png",
+      "createdAt": "2025-08-26T10:00:00.000Z",
+      "updatedAt": "2025-08-26T10:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "listId": "1",
+      "name": "Whole Wheat Bread",
+      "quantity": 2,
+      "unit": "loaves",
+      "price": 12.5,
+      "category": "Bread",
+      "isCompleted": true,
+      "priority": "high",
+      "notes": "",
+      "image": "/Image/Fast-Food.png",
+      "createdAt": "2025-08-26T10:00:00.000Z",
+      "updatedAt": "2025-08-26T10:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "listId": "1",
+      "name": "Chicken Breast",
+      "quantity": 1,
+      "unit": "kg",
+      "price": 89.99,
+      "category": "Meat",
+      "isCompleted": false,
+      "priority": "high",
+      "notes": "Skinless preferred",
+      "image": "/Image/Meat.png",
+      "createdAt": "2025-08-26T10:00:00.000Z",
+      "updatedAt": "2025-08-26T10:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "listId": "1",
+      "name": "Spinach",
+      "quantity": 500,
+      "unit": "grams",
+      "price": 18.99,
+      "category": "Vegetable",
+      "isCompleted": false,
+      "priority": "medium",
+      "notes": "Fresh organic if available",
+      "image": "/Image/Fruits-Veg.png",
+      "createdAt": "2025-08-26T10:00:00.000Z",
+      "updatedAt": "2025-08-26T10:00:00.000Z"
+    },
+    {
+      "id": "5",
+      "listId": "1",
+      "name": "Orange Juice",
+      "quantity": 1,
+      "unit": "bottle",
+      "price": 24.99,
+      "category": "Drinks",
+      "isCompleted": false,
+      "priority": "low",
+      "notes": "No pulp",
+      "image": "/Image/Fast-Food.png",
+      "createdAt": "2025-08-26T10:00:00.000Z",
+      "updatedAt": "2025-08-26T10:00:00.000Z"
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Fruits",
+      "icon": "🍎",
+      "color": "#FEE2E2",
+      "description": "Fresh fruits and berries"
+    },
+    {
+      "id": "2",
+      "name": "Bread",
+      "icon": "🍞",
+      "color": "#FED7AA",
+      "description": "Bread, buns, and bakery items"
+    },
+    {
+      "id": "3",
+      "name": "Vegetable",
+      "icon": "🥬",
+      "color": "#DCFCE7",
+      "description": "Fresh vegetables and greens"
+    },
+    {
+      "id": "4",
+      "name": "Meat",
+      "icon": "🥩",
+      "color": "#FEE2E2",
+      "description": "Fresh meat and poultry"
+    },
+    {
+      "id": "5",
+      "name": "Fish",
+      "icon": "🐟",
+      "color": "#DBEAFE",
+      "description": "Fresh fish and seafood"
+    },
+    {
+      "id": "6",
+      "name": "Drinks",
+      "icon": "🥤",
+      "color": "#FED7AA",
+      "description": "Beverages and drinks"
+    }
+  ]
+}
