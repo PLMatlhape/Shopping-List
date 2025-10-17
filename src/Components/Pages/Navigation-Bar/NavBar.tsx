@@ -11,13 +11,12 @@ const NavBar: React.FC = () => {
     };
 
     const handleSignUpClick = () => {
-        navigate('/signup');
     };
 
     return (
         <header>
             <nav>
-                <div className="logo">
+                <div className="logo clickable" onClick={handleLogoClick}>
                     <img src="/Image/Logo.png" alt="Shopping List Logo" />
                     Shopping List
                 </div>
@@ -25,10 +24,11 @@ const NavBar: React.FC = () => {
                     <li><a href="#home" className="active">Home</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#categories">Categories</a></li>
+                    <li><button onClick={handleDashboardClick} className="nav-dashboard-btn">Dashboard</button></li>
                     <li><a href="#services">Services</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
-                <button className="signup-btn" onClick={handleSignUpClick}>SignUp</button>
+
                 <button className="mobile-menu-btn" onClick={toggleMenu}>
                     {isMenuOpen ? '✕' : '☰'}
                 </button>
