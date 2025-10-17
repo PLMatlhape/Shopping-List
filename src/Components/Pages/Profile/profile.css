@@ -206,12 +206,12 @@
 }
 
 .user-avatar {
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 40px;
   border-radius: 12px;
   border: 3px solid white;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   transition: all 0.3s ease;
 }
@@ -483,8 +483,8 @@
   }
 
   .user-avatar {
-    width: 100px;
-    height: 100px;
+    width: 45px;
+    height: 45px;
   }
 
   .user-name {
@@ -524,8 +524,8 @@
   }
 
   .user-avatar {
-    width: 80px;
-    height: 80px;
+    width: 36px;
+    height: 36px;
   }
 
   .user-name {
